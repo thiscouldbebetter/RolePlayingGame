@@ -1,17 +1,17 @@
 
-function Venue(name, camera, map, portals, movers)
+function Place2(name, camera, map, portals, movers)
 {
 	this.name = name;
 	this.camera = camera;
 	this.map = map;
 	this.portals = portals;
 	this.movers = movers;
-	
-	this.moversToRemove = [];	
+
+	this.moversToRemove = [];
 }
 
 {
-	Venue.prototype.initialize = function(universe, world)
+	Place2.prototype.initialize = function(universe, world)
 	{
 		this.constraintCameraFollowPlayer = new Constraint_Follow
 		(
@@ -21,8 +21,8 @@ function Venue(name, camera, map, portals, movers)
 		this.updateForTimerTick(universe, world);
 	}
 
-	Venue.prototype.updateForTimerTick = function(universe, world)
-	{			
+	Place2.prototype.updateForTimerTick = function(universe, world)
+	{
 		for (var i = 0; i < this.portals.length; i++)
 		{
 			var portal = this.portals[i];
@@ -43,28 +43,28 @@ function Venue(name, camera, map, portals, movers)
 				this.constraintCameraFollowPlayer.target = this.camera;
 			}
 			this.movers.remove(mover);
-		}		
+		}
 		this.moversToRemove.length = 0;
 	}
-	
+
 	// drawable
-	
-	Venue.prototype.draw = function(universe, world)
+
+	Place2.prototype.draw = function(universe, world)
 	{
 		this.constraintCameraFollowPlayer.apply(this.camera);
 	
 		universe.display.clear();
 	
 		var visualCamera = new VisualCamera(this.camera);
-		
+
 		this.map.draw(universe, this, universe.display, visualCamera);
-				
+
 		for (var i = 0; i < this.portals.length; i++)
 		{
 			var portal = this.portals[i];
 			portal.draw(universe, world, visualCamera);
 		}
-		
+
 		for (var i = 0; i < this.movers.length; i++)
 		{
 			var mover = this.movers[i];

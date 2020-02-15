@@ -16,7 +16,7 @@ function VisualCamera(camera, child)
 			this.camera.pos
 		).add
 		(
-			display.sizeInPixelsHalf
+			display.sizeInPixels.clone().half()
 		);
 		this.child.draw(universe, world, display, drawable);
 		drawable.pos.overwriteWith(this.drawablePosOriginal);

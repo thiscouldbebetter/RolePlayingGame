@@ -1,5 +1,5 @@
 
-function Image(name, size, systemImage)
+function Image2(name, size, systemImage)
 {
 	this.name = name;
 	this.size = size;
@@ -9,7 +9,7 @@ function Image(name, size, systemImage)
 }
 
 {
-	Image.fromStrings = function(name, colors, pixelsAsStrings)
+	Image2.fromStrings = function(name, colors, pixelsAsStrings)
 	{
 		var size = new Coords
 		(
@@ -28,7 +28,7 @@ function Image(name, size, systemImage)
 			{
 				var pixelColorCode = pixelRowAsString[x];
 				var pixelColor = colors[pixelColorCode];
-				graphics.fillStyle = pixelColor.systemColor;
+				graphics.fillStyle = pixelColor.systemColor();
 				graphics.fillRect(x, y, 1, 1);
 			}
 		}
@@ -36,7 +36,7 @@ function Image(name, size, systemImage)
 		var systemImage = document.createElement("img");
 		systemImage.src = canvas.toDataURL();
 		
-		var returnValue = new Image
+		var returnValue = new Image2
 		(
 			name, size, systemImage
 		);
@@ -44,7 +44,7 @@ function Image(name, size, systemImage)
 		return returnValue;
 	}
 	
-	Image.prototype.toDisplay = function()
+	Image2.prototype.toDisplay = function()
 	{
 		return new Display(this.size).initialize().drawImage(this, new Coords(0, 0));
 	}

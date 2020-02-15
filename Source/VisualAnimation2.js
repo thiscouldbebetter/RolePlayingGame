@@ -1,14 +1,14 @@
 
-function VisualAnimation(framesPerSecond, frames)
+function VisualAnimation2(framesPerSecond, frames)
 {
 	this.framesPerSecond = framesPerSecond;
 	this.frames = frames;
-	
+
 	this.durationInSeconds = this.frames.length / this.framesPerSecond;
 }
 
 {
-	VisualAnimation.prototype.draw = function(universe, world, display, drawable)
+	VisualAnimation2.prototype.draw = function(universe, world, display, drawable)
 	{
 		if (drawable.secondsSinceAnimationStarted == null)
 		{
@@ -22,8 +22,9 @@ function VisualAnimation(framesPerSecond, frames)
 		
 		var frameCurrent = this.frames[frameIndexCurrent];
 		frameCurrent.draw(universe, world, display, drawable);
-		
-		drawable.secondsSinceAnimationStarted += universe.secondsPerTimerTick;
+
+		var secondsPerTick = universe.timerHelper.millisecondsPerTick / 1000;
+		drawable.secondsSinceAnimationStarted += secondsPerTick;
 		if (drawable.secondsSinceAnimationStarted >= this.durationInSeconds)
 		{
 			drawable.secondsSinceAnimationStarted -= this.durationInSeconds;

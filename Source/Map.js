@@ -2,7 +2,7 @@
 function Map(cellSizeInPixels, terrains, cellsAsStrings)
 {
 	this.cellSizeInPixels = cellSizeInPixels;
-	this.terrains = terrains.addLookups("code");
+	this.terrains = terrains.addLookups(x => x.code);
 	this.cellsAsStrings = cellsAsStrings;
 	
 	this.sizeInCells = new Coords
@@ -10,9 +10,9 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 		cellsAsStrings[0].length, cellsAsStrings.length
 	);
 	
-	this.sizeInCellsMinusOnes = this.sizeInCells.clone().addXY
+	this.sizeInCellsMinusOnes = this.sizeInCells.clone().addDimensions
 	(
-		-1, -1
+		-1, -1, 0
 	);
 	
 	this.cellPos = new Coords();
@@ -35,10 +35,10 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 		var drawPos = this.drawPos;
 		var cell = {};
 		cell.pos = drawPos;
-		cell.velInCellsPerTick = new Coords(0, 0); // hack
-		var halves = new Coords(.5, .5);
-		var ones = new Coords(1, 1);
-		
+		cell.velInCellsPerTick = new Coords(0, 0, 0); // hack
+		var halves = new Coords(.5, .5, 0);
+		var ones = new Coords(1, 1, 0);
+
 		var camera = visualCamera.camera;
 		var cameraPos = camera.pos;
 		var cameraViewSizeHalf = camera.viewSizeHalf;
@@ -62,15 +62,15 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 		(
 			this.sizeInCellsMinusOnes
 		);
-						
+
 		for (var y = cellPosMin.y; y <= cellPosMax.y; y++)
 		{
 			cellPos.y = y;
-			
+
 			for (var x = cellPosMin.x; x <= cellPosMax.x; x++)
 			{
 				cellPos.x = x;
-				
+
 				drawPos.overwriteWith
 				(
 					cellPos
@@ -78,10 +78,10 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 				(
 					this.cellSizeInPixels
 				);
-				
+
 				var terrain = this.terrainAtPosInCells(cellPos);
 				var terrainVisual = terrain.visual;
-				visualCamera.child = terrainVisual;				
+				visualCamera.child = terrainVisual;
 				visualCamera.draw
 				(
 					universe, world, display, cell
@@ -89,16 +89,22 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 			}
 		}
 
-		var sizeDiminished = this.sizeInCellsMinusOnes.clone().addXY(-1, -1);
-		
-		var cornerPosMin = cellPosMin.clone().addXY(-1, -1).trimToRangeMax(this.sizeInCells);
+		var sizeDiminished = this.sizeInCellsMinusOnes.clone().addDimensions
+		(
+			-1, -1, 0
+		);
+
+		var cornerPosMin = cellPosMin.clone().addDimensions
+		(
+			-1, -1, 0
+		).trimToRangeMax(this.sizeInCells);
 		var cornerPosMax = cellPosMax.trimToRangeMax(sizeDiminished);
 		var cornerPos = new Coords();
 		var neighborOffsets = 
 		[
-			new Coords(0, 0),		
+			new Coords(0, 0),
 			new Coords(1, 0),
-			new Coords(0, 1),			
+			new Coords(0, 1),
 			new Coords(1, 1),
 		];
 		var neighborPos = new Coords();
@@ -129,10 +135,10 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 						terrainHighestSoFar = neighborTerrain;
 					}
 				}
-				
+
 				var terrainHighest = terrainHighestSoFar;
 				var visualChildIndexSoFar = 0;
-		
+
 				for (var n = 0; n < neighborOffsets.length; n++)
 				{
 					var neighborOffset = neighborOffsets[n];
@@ -143,7 +149,7 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 						visualChildIndexSoFar |= (1 << n);
 					}
 				}
-				
+
 				if (visualChildIndexSoFar > 0)
 				{
 					drawPos.overwriteWith
@@ -153,11 +159,11 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 					(
 						this.cellSizeInPixels
 					);
-					
+
 					var terrainVisual = terrainHighest.visual.children[visualChildIndexSoFar];
 					if (terrainVisual != null) // hack
 					{
-						visualCamera.child = terrainVisual;				
+						visualCamera.child = terrainVisual;
 						visualCamera.draw
 						(
 							universe, world, display, cell

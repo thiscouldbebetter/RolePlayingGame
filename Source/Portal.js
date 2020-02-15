@@ -2,11 +2,12 @@
 function Portal(defnName, posInCells, destinationVenueName, destinationPosInCells)
 {
 	this.defnName = defnName;
-	this.posInCells = posInCells.addXY(.5, .5);
+	this.posInCells = posInCells.addDimensions(.5, .5, 0);
 	this.destinationVenueName = destinationVenueName;
 	this.destinationPosInCells = destinationPosInCells;
-	
+
 	this.pos = new Coords();
+	this.locatable = new Locatable(new Location(this.pos));
 }
 
 {

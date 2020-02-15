@@ -1,14 +1,14 @@
 
-function VisualDirectional(visualAtRest, visualsForDirections)
+function VisualDirectional2(visualAtRest, visualsForDirections)
 {
 	this.visualAtRest = visualAtRest;
 	this.visualsForDirections = visualsForDirections;
-	
+
 	this.polar = new Polar();
 }
 
 {
-	VisualDirectional.prototype.draw = function(universe, world, display, drawable)
+	VisualDirectional2.prototype.draw = function(universe, world, display, drawable)
 	{
 		var visualToDraw = null;
 		var vel = drawable.velInCellsPerTick;
