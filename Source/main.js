@@ -1,16 +1,4 @@
-function mainOld()
-{
-	var display = new Display([new Coords(200, 200)]);
-	var mapCellSizeInPixels = new Coords(16, 16);
-	var world = World.demo(display.sizeInPixels, mapCellSizeInPixels);
-	var universe = new Universe
-	(
-		10, // timerTicksPerSecond
-		display, 
-		world
-	);
-	universe.start();
-}
+
 
 function main()
 {
@@ -18,16 +6,9 @@ function main()
 	// deserialization of existing saved items after the schema changes.
 	// localStorage.clear();
 
-	var mediaLibrary = MediaLibrary.fromFileNames
-	(
-		"../Content/",
-		[ "Title.png", ],
-		[ "Sound.wav" ],
-		[ "Music.mp3" ],
-		[ "Movie.webm" ],
-		[ "Font.ttf" ],
-		[ "Conversation.json", "Instructions.txt" ]
-	);
+	var mediaFilePaths = mediaFilePathsBuild();
+
+	var mediaLibrary = MediaLibrary.fromFilePaths(mediaFilePaths);
 
 	var displaySizesAvailable =
 	[
@@ -39,22 +20,64 @@ function main()
 		new Coords(200, 150, 1),
 	];
 
-	var display = new Display
+	var display = new Display2D
 	(
 		displaySizesAvailable,
 		"Font", // fontName
 		10, // fontHeightInPixels
-		"Gray", "White" // colorFore, colorBack
+		"Gray", "White", // colorFore, colorBack
+		null
 	);
 
 	var timerHelper = new TimerHelper(20);
 
-	var universe = Universe.new
+	var controlStyle = ControlStyle.Instances().Default;
+
+	var universe = Universe.create
 	(
-		"Role-Playing Game", "0.0.0-20200215-1050", timerHelper, display, mediaLibrary, null
+		"RolePlayingGame",
+		"0.0.0-20210315-0200", // version
+		timerHelper,
+		display,
+		mediaLibrary,
+		controlStyle,
+		null // worldCreate
 	);
 	universe.initialize
 	(
 		function() { universe.start(); }
 	);
+}
+
+function mediaFilePathsBuild()
+{
+	var contentDirectoryPath = "../Content/";
+
+	var fontDirectoryPath = contentDirectoryPath + "Fonts/";
+	var imageDirectoryPath = contentDirectoryPath + "Images/";
+	var soundEffectDirectoryPath = contentDirectoryPath + "Audio/Effects/";
+	var soundMusicDirectoryPath = contentDirectoryPath + "Audio/Music/";
+	var textStringDirectoryPath = contentDirectoryPath + "Text/";
+	var videoDirectoryPath = contentDirectoryPath + "Video/";
+
+	var mediaFilePaths =
+	[
+		imageDirectoryPath + "Opening.png",
+		imageDirectoryPath + "Title.png",
+
+		soundEffectDirectoryPath + "Sound.wav",
+		soundEffectDirectoryPath + "Clang.wav",
+
+		soundMusicDirectoryPath + "Music.mp3",
+		soundMusicDirectoryPath + "Title.mp3",
+
+		videoDirectoryPath + "Movie.webm",
+
+		fontDirectoryPath + "Font.ttf",
+
+		textStringDirectoryPath + "Conversation.json",
+		textStringDirectoryPath + "Instructions.txt",
+	];
+
+	return mediaFilePaths;
 }

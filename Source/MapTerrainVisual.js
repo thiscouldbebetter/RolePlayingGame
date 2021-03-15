@@ -1,53 +1,55 @@
 
-function MapTerrainVisual(children)
+class MapTerrainVisual
 {
-	this.children = children;
-	
-	var childNames = MapTerrainVisual.ChildNames;
-		
-	for (var i = 0; i < childNames.length; i++)
+	constructor(children)
 	{
-		var childName = childNames[i];
-		var child = this.children[i];
-		this.children[childName] = child;
-	}
-}
+		this.children = children;
 
-{
-	MapTerrainVisual.TestInstance = function()
+		var childNames = MapTerrainVisual.ChildNames;
+
+		for (var i = 0; i < childNames.length; i++)
+		{
+			var childName = childNames[i];
+			var child = this.children[i];
+			this.children[childName] = child;
+		}
+	}
+
+	static TestInstance()
 	{
-		// Helpful for debugging.	
+		// Helpful for debugging.
 		var radius = 3;
 		var size = new Coords(5, 5);
+		var colorBlack = Color.byName("Black");
 		return new MapTerrainVisual
 		(
 			[
-				new VisualRectangle(size, null, "Black"), // 0000 - center
-				new VisualCircle(radius, "Red", "Black"), // 0001 - inside se
-				new VisualCircle(radius, "Orange", "Black"), // 0010 - inside sw
-				new VisualCircle(radius, "Yellow","Black"), // 0011 - edge n
-				new VisualCircle(radius, "Green", "Black"), // 0100 - inside ne
-				new VisualCircle(radius, "Blue", "Black"),  // 0101 - edge w
-				new VisualCircle(radius, "Violet", "Black"), // 0110 - diagonal
-				new VisualCircle(radius, "Gray", "Black"),  // 0111 - outside se
-				new VisualRectangle(size, "Red", "Black"), // 1000 - inside nw
-				new VisualRectangle(size, "Orange", "Black"), // 1001 - diagonal?
-				new VisualRectangle(size, "Yellow", "Black"), // 1010 - edge e
-				new VisualRectangle(size, "Green", "Black"), // 1011 - outside sw
-				new VisualRectangle(size, "Blue", "Black"), // 1100 - edge s
-				new VisualRectangle(size, "Violet", "Black"), // 1101 - outside ne
-				new VisualRectangle(size, "Gray", "Black"), // 1110 - outside nw
-				new VisualRectangle(size, null, "Red"), // 1111 // Never
+				new VisualRectangle(size, null, colorBlack ), // 0000 - center
+				new VisualCircle(radius, Color.byName("Red"), colorBlack ), // 0001 - inside se
+				new VisualCircle(radius, Color.byName("Orange"), colorBlack ), // 0010 - inside sw
+				new VisualCircle(radius, Color.byName("Yellow"), colorBlack ), // 0011 - edge n
+				new VisualCircle(radius, Color.byName("Green"), colorBlack ), // 0100 - inside ne
+				new VisualCircle(radius, Color.byName("Blue"), colorBlack ),  // 0101 - edge w
+				new VisualCircle(radius, Color.byName("Violet"), colorBlack ), // 0110 - diagonal
+				new VisualCircle(radius, Color.byName("Gray"), colorBlack ),  // 0111 - outside se
+				new VisualRectangle(size, Color.byName("Red"), colorBlack ), // 1000 - inside nw
+				new VisualRectangle(size, Color.byName("Orange"), colorBlack ), // 1001 - diagonal?
+				new VisualRectangle(size, Color.byName("Yellow"), colorBlack ), // 1010 - edge e
+				new VisualRectangle(size, Color.byName("Green"), colorBlack ), // 1011 - outside sw
+				new VisualRectangle(size, Color.byName("Blue"), colorBlack ), // 1100 - edge s
+				new VisualRectangle(size, Color.byName("Violet"), colorBlack ), // 1101 - outside ne
+				new VisualRectangle(size, Color.byName("Gray"), colorBlack ), // 1110 - outside nw
+				new VisualRectangle(size, null, Color.byName("Red") ), // 1111 // Never
 			]
 		);
 	}
-	
-	MapTerrainVisual.ChildNames = 
+
+	static ChildNames = 
 	[
 		"Center",
 		"InsideSE",
-		"InsideSW",	
-		"EdgeN",		
+		"InsideSW",
+		"EdgeN",
 		"InsideNE",
 		"EdgeW",
 		"DiagonalSlash",
@@ -61,9 +63,8 @@ function MapTerrainVisual(children)
 		"OutsideNW"
 	]
 
-
-	MapTerrainVisual.prototype.draw = function(universe, world, display, drawable)
+	draw(universe, world, place, drawable, display)
 	{
-		this.children["Center"].draw(universe, world, display, drawable);
+		this.children["Center"].draw(universe, world, place, drawable, display);
 	}
 }

@@ -1,17 +1,18 @@
 
-function Place2(name, camera, map, portals, movers)
+class Place2
 {
-	this.name = name;
-	this.camera = camera;
-	this.map = map;
-	this.portals = portals;
-	this.movers = movers;
+	constructor(name, camera, map, portals, movers)
+	{
+		this.name = name;
+		this.camera = camera;
+		this.map = map;
+		this.portals = portals;
+		this.movers = movers;
 
-	this.moversToRemove = [];
-}
+		this.moversToRemove = [];
+	}
 
-{
-	Place2.prototype.initialize = function(universe, world)
+	initialize(universe, world)
 	{
 		this.constraintCameraFollowPlayer = new Constraint_Follow
 		(
@@ -21,20 +22,20 @@ function Place2(name, camera, map, portals, movers)
 		this.updateForTimerTick(universe, world);
 	}
 
-	Place2.prototype.updateForTimerTick = function(universe, world)
+	updateForTimerTick(universe, world)
 	{
 		for (var i = 0; i < this.portals.length; i++)
 		{
 			var portal = this.portals[i];
 			portal.updateForTimerTick(universe, world, this);
 		}
-	
+
 		for (var i = 0; i < this.movers.length; i++)
 		{
 			var mover = this.movers[i];
 			mover.updateForTimerTick(universe, world, this);	
 		}
-		
+
 		for (var i = 0; i < this.moversToRemove.length; i++)
 		{
 			var mover = this.moversToRemove[i];
@@ -49,12 +50,12 @@ function Place2(name, camera, map, portals, movers)
 
 	// drawable
 
-	Place2.prototype.draw = function(universe, world)
+	draw(universe, world)
 	{
 		this.constraintCameraFollowPlayer.apply(this.camera);
-	
+
 		universe.display.clear();
-	
+
 		var visualCamera = new VisualCamera(this.camera);
 
 		this.map.draw(universe, this, universe.display, visualCamera);

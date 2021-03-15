@@ -1,22 +1,18 @@
 
-function Portal(defnName, posInCells, destinationVenueName, destinationPosInCells)
+class Portal
 {
-	this.defnName = defnName;
-	this.posInCells = posInCells.addDimensions(.5, .5, 0);
-	this.destinationVenueName = destinationVenueName;
-	this.destinationPosInCells = destinationPosInCells;
-
-	this.pos = new Coords();
-	this.locatable = new Locatable(new Location(this.pos));
-}
-
-{
-	Portal.prototype.defn = function(world)
+	constructor(defnName, posInCells, destinationVenueName, destinationPosInCells)
 	{
-		return world.portalDefns[this.defnName];
+		this.defnName = defnName;
+		this.posInCells = posInCells.addDimensions(.5, .5, 0);
+		this.destinationVenueName = destinationVenueName;
+		this.destinationPosInCells = destinationPosInCells;
+
+		this.pos = new Coords();
+		this._locatable = new Locatable(new Disposition(this.pos));
 	}
 
-	Portal.prototype.activate = function(universe, world, venue, actor)
+	activate(universe, world, venue, actor)
 	{
 		var mover = actor;
 		venue.moversToRemove.push(mover);
@@ -25,19 +21,29 @@ function Portal(defnName, posInCells, destinationVenueName, destinationPosInCell
 		mover.posInCells.overwriteWith(this.destinationPosInCells);
 		world.venueNext = venueNext;
 	}
-	
-	Portal.prototype.updateForTimerTick = function(universe, world, venue)
+
+	defn(world)
 	{
-		this.pos.overwriteWith(this.posInCells).multiply(venue.map.cellSizeInPixels);	
+		return world.portalDefns[this.defnName];
 	}
-	
+
+	locatable()
+	{
+		return this._locatable;
+	}
+
+	updateForTimerTick(universe, world, venue)
+	{
+		this.pos.overwriteWith(this.posInCells).multiply(venue.map.cellSizeInPixels);
+	}
+
 	// drawable
-		
-	Portal.prototype.draw = function(universe, world, visualCamera)
+
+	draw(universe, world, visualCamera)
 	{
 		var defn = this.defn(world);
 		var visual = defn.visual;
 		visualCamera.child = visual;
-		visualCamera.draw(universe, world, universe.display, this);
+		visualCamera.draw(universe, world, null, this, universe.display);
 	}
 }

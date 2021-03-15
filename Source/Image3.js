@@ -1,15 +1,16 @@
 
-function Image2(name, size, systemImage)
+class Image3
 {
-	this.name = name;
-	this.size = size;
-	this.systemImage = systemImage;
-	
-	this.sizeHalf = this.size.clone().half();
-}
+	constructor(name, size, systemImage)
+	{
+		this.name = name;
+		this.size = size;
+		this.systemImage = systemImage;
 
-{
-	Image2.fromStrings = function(name, colors, pixelsAsStrings)
+		this.sizeHalf = this.size.clone().half();
+	}
+
+	static fromStrings(name, colorsByCode, pixelsAsStrings)
 	{
 		var size = new Coords
 		(
@@ -19,7 +20,7 @@ function Image2(name, size, systemImage)
 		canvas.width = size.x;
 		canvas.height = size.y;
 		var graphics = canvas.getContext("2d");
-		
+
 		for (var y = 0; y < size.y; y++)
 		{
 			var pixelRowAsString = pixelsAsStrings[y];
@@ -27,25 +28,25 @@ function Image2(name, size, systemImage)
 			for (var x = 0; x < size.x; x++)
 			{
 				var pixelColorCode = pixelRowAsString[x];
-				var pixelColor = colors[pixelColorCode];
+				var pixelColor = colorsByCode.get(pixelColorCode);
 				graphics.fillStyle = pixelColor.systemColor();
 				graphics.fillRect(x, y, 1, 1);
 			}
 		}
-		
+
 		var systemImage = document.createElement("img");
 		systemImage.src = canvas.toDataURL();
-		
-		var returnValue = new Image2
+
+		var returnValue = new Image3
 		(
 			name, size, systemImage
 		);
-		
+
 		return returnValue;
 	}
-	
-	Image2.prototype.toDisplay = function()
+
+	toDisplay()
 	{
-		return new Display(this.size).initialize().drawImage(this, new Coords(0, 0));
+		return new Display2D(this.size).initialize().drawImage(this, new Coords(0, 0));
 	}
 }

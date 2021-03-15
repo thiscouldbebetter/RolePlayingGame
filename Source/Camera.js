@@ -1,8 +1,11 @@
 
-function Camera(viewSize, pos)
+class Camera
 {
-	this.viewSize = viewSize;
-	this.pos = pos;
-	
-	this.viewSizeHalf = this.viewSize.clone().half();
+	constructor(viewSize, pos)
+	{
+		this.viewSize = viewSize;
+		this.pos = pos;
+
+		this.viewSizeHalf = this.viewSize.clone().half();
+	}
 }

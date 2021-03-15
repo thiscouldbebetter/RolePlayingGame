@@ -1,11 +1,12 @@
 
-function Constraint_Follow(target)
+class Constraint_Follow
 {
-	this.target = target;
-}
+	constructor(target)
+	{
+		this.target = target;
+	}
 
-{
-	Constraint_Follow.prototype.apply = function(constrainable)
+	apply(constrainable)
 	{
 		constrainable.pos.overwriteWith(this.target.pos);
 	}

@@ -1,6 +1,9 @@
 
-function ActivityDefn(name, perform)
+class ActivityDefn
 {
-	this.name = name;
-	this.perform = perform;
+	constructor(name, perform)
+	{
+		this.name = name;
+		this.perform = perform;
+	}
 }

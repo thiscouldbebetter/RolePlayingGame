@@ -1,14 +1,15 @@
 
-function VisualCamera(camera, child)
+class VisualCamera
 {
-	this.camera = camera;
-	this.child = child;
-	
-	this.drawablePosOriginal = new Coords();
-}
+	constructor(camera, child)
+	{
+		this.camera = camera;
+		this.child = child;
 
-{
-	VisualCamera.prototype.draw = function(universe, world, display, drawable)
+		this.drawablePosOriginal = new Coords();
+	}
+
+	draw(universe, world, place, drawable, display)
 	{
 		this.drawablePosOriginal.overwriteWith(drawable.pos);
 		drawable.pos.subtract
@@ -18,7 +19,7 @@ function VisualCamera(camera, child)
 		(
 			display.sizeInPixels.clone().half()
 		);
-		this.child.draw(universe, world, display, drawable);
+		this.child.draw(universe, world, place, drawable, display);
 		drawable.pos.overwriteWith(this.drawablePosOriginal);
 	}
 }

@@ -1,26 +1,27 @@
 
-function Map(cellSizeInPixels, terrains, cellsAsStrings)
+class MapOfCells
 {
-	this.cellSizeInPixels = cellSizeInPixels;
-	this.terrains = terrains.addLookups(x => x.code);
-	this.cellsAsStrings = cellsAsStrings;
-	
-	this.sizeInCells = new Coords
-	(
-		cellsAsStrings[0].length, cellsAsStrings.length
-	);
-	
-	this.sizeInCellsMinusOnes = this.sizeInCells.clone().addDimensions
-	(
-		-1, -1, 0
-	);
-	
-	this.cellPos = new Coords();
-	this.drawPos = new Coords();
-}
+	constructor(cellSizeInPixels, terrains, cellsAsStrings)
+	{
+		this.cellSizeInPixels = cellSizeInPixels;
+		this.terrains = terrains.addLookups(x => x.code);
+		this.cellsAsStrings = cellsAsStrings;
 
-{
-	Map.prototype.terrainAtPosInCells = function(posInCells)
+		this.sizeInCells = new Coords
+		(
+			cellsAsStrings[0].length, cellsAsStrings.length
+		);
+
+		this.sizeInCellsMinusOnes = this.sizeInCells.clone().addDimensions
+		(
+			-1, -1, 0
+		);
+
+		this.cellPos = new Coords();
+		this.drawPos = new Coords();
+	}
+
+	terrainAtPosInCells(posInCells)
 	{
 		var terrainCode = this.cellsAsStrings[posInCells.y][posInCells.x];
 		var terrain = this.terrains[terrainCode];
@@ -29,7 +30,7 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 
 	// drawable
 
-	Map.prototype.draw = function(universe, world, display, visualCamera)
+	draw(universe, world, display, visualCamera)
 	{
 		var cellPos = this.cellPos;
 		var drawPos = this.drawPos;
@@ -84,7 +85,7 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 				visualCamera.child = terrainVisual;
 				visualCamera.draw
 				(
-					universe, world, display, cell
+					universe, world, null, cell, display
 				);
 			}
 		}
@@ -166,7 +167,7 @@ function Map(cellSizeInPixels, terrains, cellsAsStrings)
 						visualCamera.child = terrainVisual;
 						visualCamera.draw
 						(
-							universe, world, display, cell
+							universe, world, null, cell, display
 						);
 					}
 				}

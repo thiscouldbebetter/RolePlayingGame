@@ -1,15 +1,17 @@
 
-function World(name, portalDefns, activityDefns, venues)
+class World
 {
-	this.name = name;
-	this.portalDefns = portalDefns.addLookupsByName();
-	this.activityDefns = activityDefns.addLookupsByName();
-	this.venues = venues.addLookupsByName();
+	constructor(name, portalDefns, activityDefns, venues)
+	{
+		this.name = name;
+		this.portalDefns = portalDefns.addLookupsByName();
+		this.activityDefns = activityDefns.addLookupsByName();
+		this.venues = venues.addLookupsByName();
 
-	this.venueNext = this.venues[0];
-}
-{
-	World.new = function()
+		this.venueNext = this.venues[0];
+	}
+
+	static create()
 	{
 		// hack
 		var displaySizeInPixels = new Coords(400, 300);
@@ -31,7 +33,8 @@ function World(name, portalDefns, activityDefns, venues)
 						new Coords(0, -1).multiply(portalSize),
 						new Coords(-.5, -.5).multiply(portalSize),
 					]),
-					"LightGreen", "Green"
+					Color.byName("GreenLight"),
+					Color.byName("Green")
 				)
 			),
 			new PortalDefn
@@ -49,12 +52,12 @@ function World(name, portalDefns, activityDefns, venues)
 						new Coords(0, .25).multiply(portalSize),
 						new Coords(0, .5).multiply(portalSize),
 					]),
-					"LightGreen", "Green"
+					Color.byName("GreenLight"),
+					Color.byName("Green")
 				)
 			)
-			
 		];
-		
+
 		var activityDefns = 
 		[
 			new ActivityDefn
@@ -65,7 +68,7 @@ function World(name, portalDefns, activityDefns, venues)
 					// Do nothing.
 				} 
 			),
-			
+
 			new ActivityDefn
 			(
 				"MoveRandomly",
@@ -114,7 +117,7 @@ function World(name, portalDefns, activityDefns, venues)
 					(
 						actor.posInCells
 					);
-					
+
 					var distanceToTarget = displacementToTarget.magnitude();
 
 					var speedInCellsPerTick = 0.1;
@@ -140,7 +143,7 @@ function World(name, portalDefns, activityDefns, venues)
 					}
 				}
 			),
-			
+
 			new ActivityDefn
 			(
 				"UserInputAccept", 
@@ -205,14 +208,14 @@ function World(name, portalDefns, activityDefns, venues)
 					}
 				} 
 			),
-			
+
 		];
-		
-		var colors = Color.Instances()._All;
+
+		var colors = Color.Instances()._AllByCode;
 
 		var mapTerrainVisualDesert = new MapTerrainVisual(VisualImage2.manyFromImages
 		([
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertCenter", 
 				colors, 
@@ -235,7 +238,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"wyywwyywwyywwyyw",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertInsideSE", 
 				colors, 
@@ -258,7 +261,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertInsideSW", 
 				colors, 
@@ -281,7 +284,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertEdgeN", 
 				colors, 
@@ -304,7 +307,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertInsideNE", 
 				colors, 
@@ -327,7 +330,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...awyyw........",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertEdgeW", 
 				colors, 
@@ -350,7 +353,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...awyyw........",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertDiagonalBackslash", 
 				colors, 
@@ -373,7 +376,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...awyyw........",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertOutsideNW", 
 				colors, 
@@ -396,7 +399,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...awyyww.......",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertInsideNW", 
 				colors, 
@@ -419,7 +422,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........wyywa...",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertDiagonalSlash", 
 				colors, 
@@ -442,7 +445,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........wyywa...",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertEdgeE", 
 				colors, 
@@ -465,7 +468,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........wyywa...",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertOutsideNE", 
 				colors, 
@@ -488,7 +491,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........wyywa...",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertEdgeS", 
 				colors, 
@@ -511,7 +514,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertOutsideSW", 
 				colors, 
@@ -534,7 +537,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"DesertOutsideSE", 
 				colors, 
@@ -558,10 +561,10 @@ function World(name, portalDefns, activityDefns, venues)
 				]
 			),
 		]));
-		
+
 		var mapTerrainVisualRock = new MapTerrainVisual(VisualImage2.manyFromImages
 		([
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockCenter", 
 				colors, 
@@ -584,7 +587,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"A@@AA@@AA@@AA@@A",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockInsideSE", 
 				colors, 
@@ -606,8 +609,8 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 					"................",
 				]
-			),			
-			Image2.fromStrings
+			),
+			Image3.fromStrings
 			(
 				"RockInsideSW", 
 				colors, 
@@ -630,7 +633,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockEdgeN", 
 				colors, 
@@ -653,7 +656,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockInsideNE", 
 				colors, 
@@ -676,7 +679,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...aA@@A........",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockEdgeW", 
 				colors, 
@@ -699,7 +702,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...aA@@A........",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockDiagonalBackslash", 
 				colors, 
@@ -722,7 +725,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...aA@@A........",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockOutsideNW", 
 				colors, 
@@ -745,7 +748,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"...aA@@AA.......",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockInsideNW", 
 				colors, 
@@ -768,7 +771,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........A@@Aa...",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockDiagonalSlash", 
 				colors, 
@@ -791,7 +794,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........A@@Aa...",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockEdgeE", 
 				colors, 
@@ -814,7 +817,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........A@@Aa...",
 				]
 			),			
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockOutsideNE", 
 				colors, 
@@ -837,7 +840,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"........A@@Aa...",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockEdgeS", 
 				colors, 
@@ -860,7 +863,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockOutsideSW", 
 				colors, 
@@ -883,7 +886,7 @@ function World(name, portalDefns, activityDefns, venues)
 					"................",
 				]
 			),
-			Image2.fromStrings
+			Image3.fromStrings
 			(
 				"RockOutsideSE", 
 				colors, 
@@ -907,9 +910,9 @@ function World(name, portalDefns, activityDefns, venues)
 				]
 			),
 		]));
-		
+
 		//mapTerrainVisualDesert = MapTerrainVisual.TestInstance();
-				
+
 		var mapTerrains = 
 		[
 			new MapTerrain
@@ -937,7 +940,7 @@ function World(name, portalDefns, activityDefns, venues)
 				0, // zLevelForOverlays
 				new MapTerrainVisual([new VisualImage2
 				(
-					Image2.fromStrings
+					Image3.fromStrings
 					(
 						"Water", 
 						colors, 
@@ -957,12 +960,15 @@ function World(name, portalDefns, activityDefns, venues)
 							"cccccccccccccccc",
 							"cccccccccccccccc",
 							"cccccccccccccccc",
-							"cccccccccccccccc",								
+							"cccccccccccccccc",
 						]
 					)
 				)])
 			)
 		];
+
+		var colorGray = Color.byName("Gray");
+		var colorTan = Color.byName("Tan");
 
 		var moverVisual = new VisualDirectional2
 		(
@@ -977,11 +983,11 @@ function World(name, portalDefns, activityDefns, venues)
 						new Coords(-.5, 0).multiply(cellSizeInPixels),
 						new Coords(.5, 0).multiply(cellSizeInPixels),
 					]),
-					"Gray", null
+					colorGray, null
 				),
 				new VisualOffset
 				(
-					new VisualCircle(cellSizeInPixels.x / 4, "Tan", null),
+					new VisualCircle(cellSizeInPixels.x / 4, colorTan, null),
 					new Coords(0, -cellSizeInPixels.y / 2)
 				)
 			]),
@@ -1000,7 +1006,7 @@ function World(name, portalDefns, activityDefns, venues)
 								new Coords(-.5, 0).multiply(cellSizeInPixels),
 								new Coords(.5, 0).multiply(cellSizeInPixels),
 							]),
-							"Gray", null
+							colorGray, null
 						),
 						new VisualPolygon
 						(
@@ -1010,11 +1016,11 @@ function World(name, portalDefns, activityDefns, venues)
 								new Coords(-.5, 0).multiply(cellSizeInPixels),
 								new Coords(.5, 0).multiply(cellSizeInPixels),
 							]),
-							"Gray", null
+							colorGray, null
 						),
 					]
 				),
-				
+
 				// south
 				new VisualAnimation2
 				(
@@ -1030,11 +1036,11 @@ function World(name, portalDefns, activityDefns, venues)
 									new Coords(-.5, 0).multiply(cellSizeInPixels),
 									new Coords(.5, 0).multiply(cellSizeInPixels),
 								]),
-								"Gray", null
+								colorGray, null
 							),
 							new VisualOffset
 							(
-								new VisualCircle(cellSizeInPixels.x / 4, "Tan", null),
+								new VisualCircle(cellSizeInPixels.x / 4, colorTan, null),
 								new Coords(0, -cellSizeInPixels.y * .5)
 							)
 						]),
@@ -1049,11 +1055,11 @@ function World(name, portalDefns, activityDefns, venues)
 									new Coords(-.5, 0).multiply(cellSizeInPixels),
 									new Coords(.5, 0).multiply(cellSizeInPixels),
 								]),
-								"Gray", null
+								colorGray, null
 							),
 							new VisualOffset
 							(
-								new VisualCircle(cellSizeInPixels.x / 4, "Tan", null),
+								new VisualCircle(cellSizeInPixels.x / 4, colorTan, null),
 								new Coords(0, -cellSizeInPixels.y * .4)
 							)
 						]),
@@ -1073,7 +1079,7 @@ function World(name, portalDefns, activityDefns, venues)
 								new Coords(-.5, 0).multiply(cellSizeInPixels),
 								new Coords(.5, 0).multiply(cellSizeInPixels),
 							]),
-							"Gray", null
+							colorGray, null
 						),
 						new VisualPolygon
 						(
@@ -1083,7 +1089,7 @@ function World(name, portalDefns, activityDefns, venues)
 								new Coords(-.5, 0).multiply(cellSizeInPixels),
 								new Coords(.5, 0).multiply(cellSizeInPixels),
 							]),
-							"Gray", null
+							colorGray, null
 						),
 					]
 				),
@@ -1101,7 +1107,7 @@ function World(name, portalDefns, activityDefns, venues)
 								new Coords(-.5, 0).multiply(cellSizeInPixels),
 								new Coords(.5, 0).multiply(cellSizeInPixels),
 							]),
-							"Gray", null
+							colorGray, null
 						),
 						
 						new VisualPolygon
@@ -1112,20 +1118,20 @@ function World(name, portalDefns, activityDefns, venues)
 								new Coords(-.5, 0).multiply(cellSizeInPixels),
 								new Coords(.5, 0).multiply(cellSizeInPixels),
 							]),
-							"Gray", null
+							colorGray, null
 						),
 					]
 				),
 			]
 		);
-						
+
 		var venues = 
 		[ 
 			new Place2
 			(
 				"Overworld",
 				new Camera(displaySizeInPixels, new Coords(0, 0)),
-				new Map
+				new MapOfCells
 				(
 					cellSizeInPixels,
 					mapTerrains,
@@ -1167,12 +1173,12 @@ function World(name, portalDefns, activityDefns, venues)
 					),
 				]
 			),
-			
+
 			new Place2
 			(
 				"Lonelytown",
 				new Camera(displaySizeInPixels, new Coords(0, 0)),
-				new Map
+				new MapOfCells
 				(
 					cellSizeInPixels,
 					mapTerrains,
@@ -1206,9 +1212,9 @@ function World(name, portalDefns, activityDefns, venues)
 					),
 				]
 			),
-			
+
 		];
-	
+
 		var returnValue = new World
 		(
 			"WorldDemo",
@@ -1219,15 +1225,15 @@ function World(name, portalDefns, activityDefns, venues)
 		
 		return returnValue;
 	}
-	
+
 	// instance methods
-	
-	World.prototype.initialize = function(universe)
+
+	initialize(universe)
 	{
 		this.updateForTimerTick(universe);
 	}
-		
-	World.prototype.updateForTimerTick = function(universe)
+
+	updateForTimerTick(universe)
 	{
 		if (this.venueNext != null)
 		{
@@ -1237,10 +1243,14 @@ function World(name, portalDefns, activityDefns, venues)
 		}
 		this.venueCurrent.updateForTimerTick(universe, this);
 	}
-	
-	World.prototype.draw = function(universe)
+
+	draw(universe)
 	{
 		this.venueCurrent.draw(universe, this, universe.display);
 	}
-		
+
+	toControl()
+	{
+		return new ControlNone();
+	}
 }

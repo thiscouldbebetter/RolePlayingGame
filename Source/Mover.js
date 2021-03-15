@@ -1,21 +1,27 @@
 
-function Mover(name, visual, activity, posInCells)
+class Mover
 {
-	this.name = name;
-	this.visual = visual;
-	this.activity = activity;
-	this.posInCells = posInCells;
+	constructor(name, visual, activity, posInCells)
+	{
+		this.name = name;
+		this.visual = visual;
+		this.activity = activity;
+		this.posInCells = posInCells;
 
-	this.pos = new Coords();
-	this.posInCellsNext = new Coords();
-	this.posInCellsNextFloor = new Coords();
-	this.velInCellsPerTick = new Coords(0, 0);
+		this.pos = new Coords();
+		this.posInCellsNext = new Coords();
+		this.posInCellsNextFloor = new Coords();
+		this.velInCellsPerTick = new Coords(0, 0);
 
-	this.locatable = new Locatable(new Location(this.pos));
-}
+		this._locatable = new Locatable(new Disposition(this.pos));
+	}
 
-{
-	Mover.prototype.updateForTimerTick = function(universe, world, venue)
+	locatable()
+	{
+		return this._locatable;
+	}
+
+	updateForTimerTick(universe, world, venue)
 	{
 		this.posInCellsNext.overwriteWith
 		(
@@ -46,9 +52,9 @@ function Mover(name, visual, activity, posInCells)
 
 	// drawable
 
-	Mover.prototype.draw = function(universe, world, visualCamera)
+	draw(universe, world, visualCamera)
 	{
 		visualCamera.child = this.visual;
-		visualCamera.draw(universe, world, universe.display, this);
+		visualCamera.draw(universe, world, null, this, universe.display);
 	}
 }

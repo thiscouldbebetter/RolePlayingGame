@@ -1,6 +1,9 @@
 
-function PortalDefn(name, visual)
+class PortalDefn
 {
-	this.name = name;
-	this.visual = visual;
+	constructor(name, visual)
+	{
+		this.name = name;
+		this.visual = visual;
+	}
 }

@@ -1,16 +1,17 @@
 
-function VisualImage2(image, size)
+class VisualImage2
 {
-	this.image = image;
-	this.size = (size == null ? this.image.size : size);
-	
-	this.sizeHalf = this.size.clone().half();
-	
-	this.drawPos = new Coords();
-}
+	constructor(image, size)
+	{
+		this.image = image;
+		this.size = (size == null ? this.image.size : size);
 
-{
-	VisualImage2.manyFromImages = function(images)
+		this.sizeHalf = this.size.clone().half();
+
+		this.drawPos = new Coords();
+	}
+
+	static manyFromImages(images)
 	{
 		var returnValues = [];
 		for (var i = 0; i < images.length; i++)
@@ -22,7 +23,7 @@ function VisualImage2(image, size)
 		return returnValues;
 	}
 
-	VisualImage2.prototype.draw = function(universe, world, display, drawable)
+	draw(universe, world, place, drawable, display)
 	{
 		var drawPos = this.drawPos.overwriteWith
 		(
@@ -31,7 +32,7 @@ function VisualImage2(image, size)
 		(
 			this.sizeHalf
 		);
-	
+
 		display.drawImage(this.image, drawPos);
 	}
 }
