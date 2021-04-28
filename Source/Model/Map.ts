@@ -1,13 +1,28 @@
 
-class MapOfCells
+class MapOfCells2
 {
-	constructor(cellSizeInPixels, terrains, cellsAsStrings)
+	cellSizeInPixels: Coords;
+	terrains: MapTerrain[];
+	cellsAsStrings: string[];
+
+	terrainsByCode: Map<string, MapTerrain>;
+	sizeInCells: Coords;
+	sizeInCellsMinusOnes: Coords;
+	cellPos: Coords;
+
+	constructor
+	(
+		cellSizeInPixels: Coords, terrains: MapTerrain[],
+		cellsAsStrings: string[]
+	)
 	{
 		this.cellSizeInPixels = cellSizeInPixels;
-		this.terrains = terrains.addLookups(x => x.code);
+		this.terrains = terrains;
+		this.terrainsByCode =
+			ArrayHelper.addLookups(this.terrains, x => x.code);
 		this.cellsAsStrings = cellsAsStrings;
 
-		this.sizeInCells = new Coords
+		this.sizeInCells = Coords.fromXY
 		(
 			cellsAsStrings[0].length, cellsAsStrings.length
 		);
@@ -17,31 +32,31 @@ class MapOfCells
 			-1, -1, 0
 		);
 
-		this.cellPos = new Coords();
-		this.drawPos = new Coords();
+		this.cellPos = Coords.create();
 	}
 
-	terrainAtPosInCells(posInCells)
+	terrainAtPosInCells(posInCells: Coords): MapTerrain
 	{
 		var terrainCode = this.cellsAsStrings[posInCells.y][posInCells.x];
-		var terrain = this.terrains[terrainCode];
+		var terrain = this.terrainsByCode.get(terrainCode);
 		return terrain;
 	}
 
 	// drawable
 
-	draw(universe, world, display, visualCamera)
+	draw
+	(
+		universe: Universe, world: World, display: Display,
+		visualCamera: VisualCamera
+	): void
 	{
-		var cellPos = this.cellPos;
-		var drawPos = this.drawPos;
-		var cell = {};
-		cell.pos = drawPos;
-		cell.velInCellsPerTick = new Coords(0, 0, 0); // hack
-		var halves = new Coords(.5, .5, 0);
-		var ones = new Coords(1, 1, 0);
+		var cell = new MapCell2();
+		var drawPos = cell.locatable().loc.pos;
+		var halves = Coords.fromXY(.5, .5);
+		var ones = Coords.fromXY(1, 1);
 
 		var camera = visualCamera.camera;
-		var cameraPos = camera.pos;
+		var cameraPos = camera.loc.pos;
 		var cameraViewSizeHalf = camera.viewSizeHalf;
 		var cellPosMin = cameraPos.clone().subtract
 		(
@@ -63,6 +78,8 @@ class MapOfCells
 		(
 			this.sizeInCellsMinusOnes
 		);
+
+		var cellPos = this.cellPos;
 
 		for (var y = cellPosMin.y; y <= cellPosMax.y; y++)
 		{
@@ -100,17 +117,16 @@ class MapOfCells
 			-1, -1, 0
 		).trimToRangeMax(this.sizeInCells);
 		var cornerPosMax = cellPosMax.trimToRangeMax(sizeDiminished);
-		var cornerPos = new Coords();
+		var cornerPos = Coords.create();
 		var neighborOffsets = 
 		[
-			new Coords(0, 0),
-			new Coords(1, 0),
-			new Coords(0, 1),
-			new Coords(1, 1),
+			Coords.fromXY(0, 0),
+			Coords.fromXY(1, 0),
+			Coords.fromXY(0, 1),
+			Coords.fromXY(1, 1)
 		];
-		var neighborPos = new Coords();
-		var neighborTerrains = [];
-				
+		var neighborPos = Coords.create();
+
 		for (var y = cornerPosMin.y; y <= cornerPosMax.y; y++)
 		{
 			cornerPos.y = y;
@@ -161,7 +177,10 @@ class MapOfCells
 						this.cellSizeInPixels
 					);
 
-					var terrainVisual = terrainHighest.visual.children[visualChildIndexSoFar];
+					var terrainHighestVisual =
+						terrainHighest.visual as MapTerrainVisual;
+					var terrainVisual =
+						terrainHighestVisual.children[visualChildIndexSoFar];
 					if (terrainVisual != null) // hack
 					{
 						visualCamera.child = terrainVisual;
@@ -173,5 +192,20 @@ class MapOfCells
 				}
 			}
 		}
+	}
+}
+
+class MapCell2 extends Entity
+{
+	constructor()
+	{
+		super
+		(
+			MapCell2.name,
+			[
+				Locatable.create(),
+				new Mappable(Coords.create())
+			]
+		);
 	}
 }

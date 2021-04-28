@@ -1,7 +1,13 @@
 
 class Image3
 {
-	constructor(name, size, systemImage)
+	name: string;
+	size: Coords;
+	systemImage: any;
+
+	sizeHalf: Coords;
+
+	constructor(name: string, size: Coords, systemImage: any)
 	{
 		this.name = name;
 		this.size = size;
@@ -10,9 +16,13 @@ class Image3
 		this.sizeHalf = this.size.clone().half();
 	}
 
-	static fromStrings(name, colorsByCode, pixelsAsStrings)
+	static fromStrings
+	(
+		name: string, colorsByCode: Map<string, Color>,
+		pixelsAsStrings: string[]
+	): Image3
 	{
-		var size = new Coords
+		var size = Coords.fromXY
 		(
 			pixelsAsStrings[0].length, pixelsAsStrings.length
 		);
@@ -45,8 +55,27 @@ class Image3
 		return returnValue;
 	}
 
-	toDisplay()
+	/*
+	toDisplay(): Display2D
 	{
-		return new Display2D(this.size).initialize().drawImage(this, new Coords(0, 0));
+		var display = new Display2D(this.size).initialize();
+		display.drawImage(this, Coords.create());
+		return display;
+	}
+	*/
+
+	private _image2: Image2;
+
+	toImage2(universe: Universe): Image2
+	{
+		if (this._image2 == null)
+		{
+			var display: Display2D =
+				Display2D.fromSizeAndIsInvisible(this.size, true);
+			display.initialize(universe);
+			display.graphics.drawImage(this.systemImage, 0, 0);
+			this._image2 = display.toImage();
+		}
+		return this._image2;
 	}
 }

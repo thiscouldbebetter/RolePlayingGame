@@ -1,10 +1,30 @@
 
-class Place2
+class Place2 extends Place
 {
-	constructor(name, camera, map, portals, movers)
+	camera2: Camera;
+	map: MapOfCells2;
+	portals: Portal2[];
+	movers: Mover[];
+
+	moversToRemove: Mover[];
+
+	constraintCameraFollowPlayer: Constraint_Follow;
+
+	constructor
+	(
+		name: string, camera2: Camera, map: MapOfCells2,
+		portals: Portal2[], movers: Mover[]
+	)
 	{
-		this.name = name;
-		this.camera = camera;
+		super
+		(
+			name,
+			null, // defnName
+			null, // size
+			movers // entities
+		);
+
+		this.camera2 = camera2;
 		this.map = map;
 		this.portals = portals;
 		this.movers = movers;
@@ -12,7 +32,7 @@ class Place2
 		this.moversToRemove = [];
 	}
 
-	initialize(universe, world)
+	initialize(universe: Universe, world: World): void
 	{
 		this.constraintCameraFollowPlayer = new Constraint_Follow
 		(
@@ -22,7 +42,7 @@ class Place2
 		this.updateForTimerTick(universe, world);
 	}
 
-	updateForTimerTick(universe, world)
+	updateForTimerTick(universe: Universe, world: World)
 	{
 		for (var i = 0; i < this.portals.length; i++)
 		{
@@ -33,7 +53,7 @@ class Place2
 		for (var i = 0; i < this.movers.length; i++)
 		{
 			var mover = this.movers[i];
-			mover.updateForTimerTick(universe, world, this);	
+			mover.updateForTimerTick(universe, world, this);
 		}
 
 		for (var i = 0; i < this.moversToRemove.length; i++)
@@ -41,24 +61,27 @@ class Place2
 			var mover = this.moversToRemove[i];
 			if (mover == this.constraintCameraFollowPlayer.target)
 			{
-				this.constraintCameraFollowPlayer.target = this.camera;
+				this.constraintCameraFollowPlayer.target = null; // this.camera;
 			}
-			this.movers.remove(mover);
+			ArrayHelper.remove(this.movers, mover);
 		}
 		this.moversToRemove.length = 0;
 	}
 
 	// drawable
 
-	draw(universe, world)
+	draw(universe: Universe, world: World2): void
 	{
-		this.constraintCameraFollowPlayer.apply(this.camera);
+		this.constraintCameraFollowPlayer.apply(this.camera2);
 
 		universe.display.clear();
 
-		var visualCamera = new VisualCamera(this.camera);
+		var visualCamera = new VisualCamera(this.camera2, null);
 
-		this.map.draw(universe, this, universe.display, visualCamera);
+		this.map.draw
+		(
+			universe, universe.world, universe.display, visualCamera
+		);
 
 		for (var i = 0; i < this.portals.length; i++)
 		{

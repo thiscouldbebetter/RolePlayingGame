@@ -1,7 +1,12 @@
 
-class VisualAnimation2
+class VisualAnimation2 implements Visual
 {
-	constructor(framesPerSecond, frames)
+	framesPerSecond: number;
+	frames: Visual[];
+
+	durationInSeconds: number;
+
+	constructor(framesPerSecond: number, frames: Visual[])
 	{
 		this.framesPerSecond = framesPerSecond;
 		this.frames = frames;
@@ -9,8 +14,14 @@ class VisualAnimation2
 		this.durationInSeconds = this.frames.length / this.framesPerSecond;
 	}
 
-	draw(universe, world, place, drawable, display)
+	draw
+	(
+		universe: Universe, world: World, place: Place, drawableAsEntity: Entity,
+		display: Display
+	): void
 	{
+		var drawable = drawableAsEntity as Mover;
+
 		if (drawable.secondsSinceAnimationStarted == null)
 		{
 			drawable.secondsSinceAnimationStarted = 0;
@@ -31,4 +42,9 @@ class VisualAnimation2
 			drawable.secondsSinceAnimationStarted -= this.durationInSeconds;
 		}
 	}
+
+	// Visual
+	clone(): Visual { return this; }
+	overwriteWith(other: Visual): Visual { return this; }
+	transform(transformToApply: Transform): Transformable { return this; }
 }
